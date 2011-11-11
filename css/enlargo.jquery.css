@@ -1,4 +1,12 @@
+.enlargo {
+	cursor: -webkit-zoom-in;
+	cursor: -moz-zoom-in;
+}
+
 .enlargo-container {
+	cursor: -webkit-zoom-in;
+	cursor: -moz-zoom-in;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 	display: none;
 	margin: 0;
 	padding: 0;
