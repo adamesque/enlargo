@@ -3,7 +3,8 @@
 	var pluginName = 'enlargo',
 		defaults = {
 			duration: 200
-		};
+		},
+		enlargoTimer;
 
 	function Enlargo( element, options ) {
 		this.element = element;
@@ -15,7 +16,8 @@
 	}
 
 	Enlargo.prototype.init = function () {
-		var data;
+		var $this = this,
+			data;
 
 		this.el = $(this.element);
 		data = this.el.data();
@@ -50,8 +52,11 @@
 			src: this.fullSrc
 		}).appendTo(this.fullContainer);
 
-		this.el.on("click mouseenter", $.proxy(this.expand, this));
-		this.fullImg.on("mouseleave", $.proxy(this.contract, this));
+		this.el.on("click mouseenter", function () {
+			window.clearTimeout(enlargoTimer);
+			enlargoTimer = window.setTimeout($.proxy($this.expand, $this), $this.options.duration);
+		});
+		this.fullContainer.on("mouseleave", $.proxy(this.contract, this));
 	};
 
 	Enlargo.prototype.expand = function () {
