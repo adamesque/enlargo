@@ -3,9 +3,7 @@
 	var pluginName = 'enlargo',
 		defaults = {
 			duration: 200
-		},
-		overlay = $('<div class="enlargo-overlay"></div>')
-			.appendTo(document.body);
+		};
 
 	function Enlargo( element, options ) {
 		this.element = element;
@@ -36,38 +34,39 @@
 			return false;
 		}
 
-		this.fullImg = $("<img />", {
-			css: {
+		this.fullContainer = $('<div class="enlargo-container"/>')
+			.css({
 				left: this.offset.left,
 				height: this.height,
 				top: this.offset.top,
 				width: this.width
-			},
+			})
+			.appendTo(document.body);
+
+		this.fullImg = $("<img />", {
 			load: $.proxy(function () {
 				this.loaded = true;
 			}, this),
 			src: this.fullSrc
-		}).appendTo(overlay);
+		}).appendTo(this.fullContainer);
 
 		this.el.on("click mouseenter", $.proxy(this.expand, this));
 		this.fullImg.on("mouseleave", $.proxy(this.contract, this));
 	};
 
 	Enlargo.prototype.expand = function () {
-		overlay.show();
-		this.fullImg.show().animate({
+		this.fullContainer.show().animate({
 			height: this.height * 3,
 			width: this.width * 3
 		}, this.options.duration);
 	};
 
 	Enlargo.prototype.contract = function () {
-		this.fullImg.animate({
+		this.fullContainer.animate({
 			height: this.height,
 			width: this.width
 		}, this.options.duration, function () {
 			$(this).hide();
-			overlay.hide();
 		});
 	}
 
