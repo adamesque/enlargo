@@ -1,6 +1,7 @@
 .enlargo {
 	cursor: -webkit-zoom-in;
 	cursor: -moz-zoom-in;
+	display: inline-block;
 }
 
 .enlargo-container {

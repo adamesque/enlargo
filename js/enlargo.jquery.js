@@ -19,16 +19,18 @@
 		var $this = this,
 			data;
 
-		this.el = $(this.element);
+		this.el = $(this.element).addClass("enlargo");
+		this.img = this.el.find("img");
+
 		data = this.el.data();
 
-		this.width = this.el.width();
-		this.height = this.el.height();
-		this.offset = this.el.offset();
+		this.width = this.img.width();
+		this.height = this.img.height();
+		this.offset = this.img.offset();
 
-		this.fullSrc = data["fullSrc"];
-		this.fullWidth = data["fullWidth"];
-		this.fullHeight = data["fullHeight"];
+		this.fullSrc = this.el.attr("href");
+		this.fullWidth = data["width"];
+		this.fullHeight = data["height"];
 
 		this.loaded = false;
 
@@ -50,7 +52,8 @@
 			src: this.fullSrc
 		}).appendTo(this.fullContainer);
 
-		this.el.on("click mouseenter", function () {
+		this.el.on("click mouseenter", function (e) {
+			e.preventDefault();
 			window.clearTimeout($this.enlargoTimer);
 			$this.enlargoTimer = window.setTimeout($.proxy($this.expand, $this), $this.options.duration);
 		});
@@ -67,7 +70,7 @@
 			width,
 			height;
 
-		this.offset = this.el.offset();
+		this.offset = this.img.offset();
 		this.fullContainer.css({
 			left: this.offset.left,
 			top: this.offset.top
