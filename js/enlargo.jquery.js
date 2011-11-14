@@ -114,6 +114,7 @@
 			top = $windowScrollTop + m;
 		}
 
+		this.img.css("visibility", "hidden");
 		this.fullContainer.show().animate({
 			height: height || this.height * 3,
 			left: left > m ? left : m,
@@ -123,12 +124,14 @@
 	};
 
 	Enlargo.prototype.contract = function () {
+		var $this = this;
 		this.fullContainer.animate({
 			height: this.height,
 			left: this.offset.left,
 			top: this.offset.top,
 			width: this.width
 		}, this.options.duration, function () {
+			$this.img.css("visibility", "visible");
 			$(this).hide();
 		});
 	}
