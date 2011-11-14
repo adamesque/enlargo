@@ -68,7 +68,16 @@
 			left,
 			top,
 			width,
-			height;
+			height,
+			$window = $(window),
+			$windowScrollTop = $window.scrollTop(),
+			$windowScrollLeft = $window.scrollLeft(),
+			$windowHeight = $window.height(),
+			$windowWidth = $window.width(),
+			maxHeight = $windowHeight - 2*m,
+			maxWidth = $windowWidth - 2*m,
+			imageRatio = this.width / this.height,
+			screenRatio = maxWidth / maxHeight;
 
 		this.offset = this.img.offset();
 		this.fullContainer.css({
@@ -76,17 +85,40 @@
 			top: this.offset.top
 		});
 
-		left = this.offset.left - (this.fullWidth - this.width) / 2;
-		if (left + this.fullWidth > $(window).width() - m) {
-			left -= (left + this.fullWidth) - ($(window).width() - m);
+		if (this.fullWidth > maxWidth || this.fullHeight > maxHeight) {
+			if (screenRatio > imageRatio) {
+				height = maxHeight;
+				width = this.fullWidth * (maxHeight/this.fullHeight);
+			} else {
+				height = this.fullHeight * (maxWidth/this.fullWidth);
+				width = maxWidth;
+			}
+		} else {
+			width = this.fullWidth;
+			height = this.fullHeight;
 		}
-		top = this.offset.top - (this.fullHeight - this.height) / 2;
+
+		left = this.offset.left - (width - this.width) / 2;
+		// If we're hanging off the right edge, scootch left.
+		if (left + width > $windowScrollLeft + $windowWidth - m) {
+			left -= (left + width) - ($windowScrollLeft + $windowWidth - m);
+		} else if (left < $windowScrollLeft) {
+			left = $windowScrollLeft + m;
+		}
+
+		top = this.offset.top - (height - this.height) / 2;
+		// if we're hanging off the bottom edge, scootch up.
+		if (top + height > $windowScrollTop + $windowHeight - m) {
+			top -= (top + height) - ($windowScrollTop + $windowHeight - m);
+		} else if (top < $windowScrollTop) {
+			top = $windowScrollTop + m;
+		}
 
 		this.fullContainer.show().animate({
-			height: this.fullHeight || this.height * 3,
+			height: height || this.height * 3,
 			left: left > m ? left : m,
 			top: top > m ? top : m,
-			width: this.fullWidth || this.width * 3
+			width: width || this.width * 3
 		}, this.options.duration);
 	};
 
